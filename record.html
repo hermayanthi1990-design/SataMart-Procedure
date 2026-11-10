@@ -1,0 +1,193 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Studio Suara Ms. Sata</title>
+<style>
+/* Layout: one column script — sticky toolbar, then one card per line to record. */
+:root{
+  --navy:#1D2A5B; --navy-2:#2E3F7F; --red:#D3263A; --gold:#F2B21B; --teal:#1E9C8E; --teal-l:#DDF4F0; --warn:#B4461A;
+  --bg:#F6F1E7; --paper:#FFFDF8; --ink:#1A2140; --muted:#5B6280; --line:#E3D9C6;
+  --f:"Nunito","Segoe UI",system-ui,-apple-system,sans-serif; --fd:"Fredoka","Trebuchet MS","Segoe UI",system-ui,sans-serif;
+  color-scheme:light;
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 var(--f)}
+.wrap{max-width:980px;margin:0 auto;padding-block:18px 80px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+h1,h2,h3{font-family:var(--fd);color:var(--navy);margin:0;line-height:1.2;text-wrap:balance}
+h1{font-size:30px} h2{font-size:21px;margin:26px 0 8px}
+.sub{color:var(--muted);font-size:14px}
+.btn{font:inherit;font-weight:800;border:0;border-radius:10px;padding:8px 14px;cursor:pointer;background:var(--navy);color:#fff;white-space:nowrap;display:inline-flex;align-items:center;gap:6px}
+.btn:disabled{opacity:.4;cursor:not-allowed}
+.btn.red{background:var(--red)} .btn.teal{background:var(--teal)} .btn.ghost{background:#fff;color:var(--navy);border:2px solid var(--navy)}
+.btn.rec{background:var(--red);min-width:132px;justify-content:center}
+.btn.rec.on{background:#7A0F1C;animation:pulse 1s infinite}
+@keyframes pulse{50%{box-shadow:0 0 0 6px rgba(211,38,58,.25)}}
+:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+.panel{background:var(--paper);border:2px solid var(--line);border-radius:16px;padding:14px 16px;margin-top:14px}
+.tips{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;font-size:14px}
+.tips>div{background:#fff;border:2px solid var(--line);border-radius:12px;padding:8px 10px}
+.bar{position:sticky;top:0;z-index:5;background:var(--navy);color:#fff;border-radius:0 0 14px 14px;padding:10px 14px;display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:0 calc(-1*max(16px,env(safe-area-inset-left,0px)))}
+.bar .prog{flex:1;min-width:180px}
+.meter{height:10px;border-radius:5px;background:rgba(255,255,255,.25);overflow:hidden;margin-top:4px}
+.meter i{display:block;height:100%;background:var(--gold);transition:width .3s}
+.bar .btn.ghost{background:transparent;color:#fff;border-color:#fff}
+.line{background:#fff;border:2px solid var(--line);border-radius:14px;padding:12px 14px;margin:8px 0;display:grid;grid-template-columns:34px 1fr;gap:10px}
+.line.sel{border-color:var(--navy);box-shadow:0 0 0 3px rgba(29,42,91,.12)}
+.line.done{border-color:var(--teal);background:#FAFFFE}
+.no{width:30px;height:30px;border-radius:50%;background:var(--navy);color:#fff;display:grid;place-items:center;font-family:var(--fd);font-size:14px}
+.line.done .no{background:var(--teal)}
+.txt{font-size:19px;font-weight:700;line-height:1.45}
+.ctl{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:8px}
+.ctl .st{font-size:14px;font-weight:800;color:var(--muted)}
+.ctl .st.ok{color:var(--teal)}
+.lvl{width:90px;height:8px;border-radius:4px;background:#ECE6DA;overflow:hidden}
+.lvl i{display:block;height:100%;width:0;background:var(--red)}
+.fname{font-size:12px;color:var(--muted);font-family:ui-monospace,Menlo,Consolas,monospace}
+label.up{font-size:14px;font-weight:800;color:var(--navy);cursor:pointer;text-decoration:underline}
+label.up input{display:none}
+.msg{margin-top:10px;padding:10px 14px;border-radius:12px;font-weight:700;display:none}
+.msg.show{display:block}.msg.ok{background:var(--teal-l);border:2px solid var(--teal)}.msg.err{background:#FCE9DF;border:2px solid var(--warn)}
+details summary{cursor:pointer;font-weight:800;color:var(--navy);font-family:var(--fd);font-size:20px;margin-top:24px}
+ol li{margin:4px 0}
+@media (max-width:700px){.tips{grid-template-columns:1fr}}
+@media (prefers-reduced-motion: reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header style="display:flex;gap:12px;align-items:center">
+  <img src="assets/images/04_kak_sata_menyambut.png" alt="" style="width:70px;height:96px;object-fit:cover;object-position:top">
+  <div><h1>Studio Suara Ms. Sata</h1><div class="sub">Rekam suara Ibu/Bapak sendiri untuk setiap kalimat Ms. Sata di gim. Rekaman langsung dipakai oleh gim setelah diunggah.</div></div>
+</header>
+
+<div class="panel tips">
+  <div>🎙️ <b>Tempat tenang.</b> Matikan kipas/AC jika bisa. Jarak mulut ke laptop ±20 cm.</div>
+  <div>🐢 <b>Pelan dan jelas.</b> Siswa A1/A2 butuh tempo sedikit lambat, dengan jeda di setiap koma.</div>
+  <div>😊 <b>Ramah.</b> Tersenyum saat membaca membuat suara terdengar hangat.</div>
+</div>
+
+<div class="bar" id="bar">
+  <div class="prog"><b id="cnt">0/0</b> kalimat utama terekam<div class="meter"><i id="pm" style="width:0"></i></div></div>
+  <span class="sub" style="color:#D8DEF7">Pintasan: <b>Spasi</b> rekam/stop · <b>Enter</b> putar · <b>↓ ↑</b> pindah kalimat</span>
+  <button class="btn teal" id="dl">⬇ Unduh semua rekaman (.zip)</button>
+</div>
+<div class="msg" id="msg"></div>
+
+<h2>Kalimat utama</h2>
+<div id="main"></div>
+
+<details id="optd"><summary>Opsional: kosakata (<span id="ocnt"></span>)</summary>
+  <p class="sub">Kata-kata di jendela 🇮🇩 Bahasa Indonesia. Kata yang tidak direkam tetap dibacakan suara perangkat.</p>
+  <div id="opt"></div>
+</details>
+
+<details><summary>Cara memasang rekaman ke gim</summary>
+<ol>
+  <li>Klik <b>⬇ Unduh semua rekaman</b>. File <b>SataMart_audio.zip</b> berisi file suara dan <b>list.js</b>.</li>
+  <li>Ekstrak ZIP itu. Isinya dimasukkan ke folder <b>assets/audio</b> di gim (timpa list.js yang lama).</li>
+  <li>GitHub: buka folder <b>assets/audio</b> di repository → <b>Add file → Upload files</b> → seret semua file hasil ekstrak → <b>Commit changes</b>.</li>
+  <li>Buka gim, klik tombol <b>Listen</b>. Suara Ibu/Bapak yang akan terdengar. Kalimat yang belum direkam tetap memakai suara perangkat.</li>
+</ol>
+<p class="sub">Rekaman tersimpan di browser ini sampai Ibu/Bapak menghapusnya, jadi boleh dicicil di beberapa waktu. Jika teks di gim diubah, kalimat itu perlu direkam ulang karena nama filenya ikut berubah.</p>
+</details>
+</div>
+
+<script>
+const LINES=[{"t":"Hello! Before we start, please write your full name.","k":"v1l5usux","where":"Your name"},{"t":"Welcome to the team! Clear steps help us promote products and guide our customers.","k":"v1xgw760","where":"Your role"},{"t":"Clear steps help us promote products and guide our customers.","k":"vu3xc5s","where":"Your role"},{"t":"Welcome! First, read what you will learn. Then answer the big question.","k":"vg81pb7","where":"M0 · First Day at SataMart"},{"t":"Learning objective: You are able to understand procedure texts and create a procedure text. You can understand the purpose, information, and order of steps in a procedure text. You can analyse the structure, language features, logical order, and safety (K3LH) of a procedure text in a work context. You can draft a procedure text with a clear goal and the right order of steps. You can create and revise a procedure text with the right structure and language features.","k":"v1xwljdz","where":"M0 · First Day at SataMart"},{"t":"How can clear product instructions help customers trust your promotion?","k":"v1jocjqf","where":"M0 · First Day at SataMart"},{"t":"Explore two example cards. Each Quick Check gives you a stamp.","k":"v1uthzr4","where":"M1 · Passport to Promotion"},{"t":"Goal: Introduce a product through a clear promotion in the SataMart practice catalogue. You need a product information card, product photos, and a caption template. First, choose a clear product photo. Show the correct product and colour. Next, write the product name. For example, write \"Blue Pencil Case\". Then, highlight a useful benefit. Use the product card. For example, write \"Keep your pens and pencils organised!\" Add the price and a call to action. For example, write \"Rp15,000. See it in our school catalogue!\" Check the photo, product name, benefit, price, and call to action. Preview the complete content and correct any mistake. Finally, post the content to the SataMart practice catalogue. This is a simulation; you do not need a real social media account.","k":"v6c7shy","where":"M1 · Passport to Promotion"},{"t":"Goal: Introduce a product through a clear promotion in the SataMart practice catalogue.","k":"v1j61v0k","where":"M1 · Passport to Promotion"},{"t":"You need a product information card, product photos, and a caption template.","k":"v1gb89mq","where":"M1 · Passport to Promotion"},{"t":"First, choose a clear product photo. Show the correct product and colour.","k":"vj4ty9x","where":"M1 · Passport to Promotion"},{"t":"Next, write the product name. For example, write \"Blue Pencil Case\".","k":"v1lh18dj","where":"M1 · Passport to Promotion"},{"t":"Then, highlight a useful benefit. Use the product card. For example, write \"Keep your pens and pencils organised!\"","k":"v1ajk7id","where":"M1 · Passport to Promotion"},{"t":"Add the price and a call to action. For example, write \"Rp15,000. See it in our school catalogue!\"","k":"v1q75cfa","where":"M1 · Passport to Promotion"},{"t":"Check the photo, product name, benefit, price, and call to action. Preview the complete content and correct any mistake.","k":"v1d95gj2","where":"M1 · Passport to Promotion"},{"t":"Finally, post the content to the SataMart practice catalogue. This is a simulation; you do not need a real social media account.","k":"v1jsx1y6","where":"M1 · Passport to Promotion"},{"t":"Goal: Set up your phone for viewing at a desk. First, place the stand on a flat surface. Next, open the support. Then, place your phone in the holder. Check that the phone and stand are stable before use. Finally, remove the phone before folding and storing the stand.","k":"v1j23dup","where":"M1 · Passport to Promotion"},{"t":"Goal: Set up your phone for viewing at a desk.","k":"vbn2cjr","where":"M1 · Passport to Promotion"},{"t":"First, place the stand on a flat surface.","k":"vzm5ovp","where":"M1 · Passport to Promotion"},{"t":"Next, open the support.","k":"v1jteetq","where":"M1 · Passport to Promotion"},{"t":"Then, place your phone in the holder.","k":"vmf49hu","where":"M1 · Passport to Promotion"},{"t":"Check that the phone and stand are stable before use.","k":"v1b73jkt","where":"M1 · Passport to Promotion"},{"t":"Finally, remove the phone before folding and storing the stand.","k":"v6bf0h","where":"M1 · Passport to Promotion"},{"t":"Three practice tables. Check your answers and fix them if needed.","k":"v1jlm4mj","where":"M2 · SOP Detective Lab"},{"t":"Check the content before you post it.","k":"v1l4amow","where":"M2 · SOP Detective Lab"},{"t":"Brief: create catalogue content for students. Follow the six steps.","k":"vtbx533","where":"M3 · Content Creator Studio"},{"t":"Let us create a product promotion. First, choose a clear product photo. Next, write the product name. Then, highlight a useful benefit. Add the price and a call to action. Check and preview the content. Finally, post it to our practice catalogue.","k":"v182mnt7","where":"M3 · Content Creator Studio"},{"t":"Make one complete promotion for the Blue Pencil Case.","k":"v9vzexm","where":"M3 · Content Creator Studio"},{"t":"Can students see the product and understand its benefit?","k":"vqx9e2v","where":"M3 · Content Creator Studio"},{"t":"It is 09:40. The catalogue goes live at 10:00. What comes first?","k":"v1vw4bw7","where":"M3 · Content Creator Studio"},{"t":"Ready for a busy morning? Take a breath, then show your SOP skills!","k":"v1vnrnze","where":"M4 · Rush Hour Challenge"},{"t":"Create clear product instructions for your demonstration.","k":"vioi9sx","where":"M5 · Boss Level: Guide Maker"},{"t":"I saw the phone stand in your catalogue. How do I use it?","k":"vbdumve","where":"M5 · Boss Level: Guide Maker"},{"t":"Test your guide, improve it, and think about your learning.","k":"vaa68du","where":"M6 · Test Drive & Level Up"},{"t":"Put it there. Change it to: Place your phone in the holder.","k":"vf9ra0j","where":"M6 · Test Drive & Level Up"},{"t":"What makes instructions useful?","k":"v1km846q","where":"M6 · Test Drive & Level Up"},{"t":"Which step did you improve?","k":"vzkxo4j","where":"M6 · Test Drive & Level Up"},{"t":"What will you practise next?","k":"v1b9347","where":"M6 · Test Drive & Level Up"},{"t":"Here is your progress so far.","k":"v19ztoya","where":"Final report"},{"t":"A procedure text explains how to do or use something through clear, ordered steps. Its purpose is to help readers complete a task or use a product correctly.","k":"v1stvisc","where":"Handbook"},{"t":"A procedure text has a goal, tools or materials, and steps. Add tips or warnings when they are relevant.","k":"v1el0yeu","where":"Handbook"},{"t":"Use imperative sentences: base verb plus object. For example: Choose a clear product photo. Use sequence words: first, next, then, finally.","k":"v9qtroy","where":"Handbook"},{"t":"Before a demonstration, tidy the cables, dry the table, and use the tools as the instructions say.","k":"vcqkqag","where":"Handbook"},{"t":"Hi, I'm Ms. Sata, your marketing mentor. First, choose a clear product photo. Then, check it before you post it.","k":"v1o84dib","where":"Settings test"},{"t":"Congratulations! You completed every mission.","k":"v13omz20","where":"Final report"}];
+const WORDS=[{"t":"mission","k":"v1jdsy2v"},{"t":"locked","k":"v3ahtpz"},{"t":"unlock","k":"v93op3l"},{"t":"completed","k":"vifnruq"},{"t":"stamp","k":"v4jm5nu"},{"t":"passport","k":"v6n80wx"},{"t":"guide","k":"v4b634j"},{"t":"action verb","k":"v6a1she"},{"t":"add","k":"v3772ry"},{"t":"after","k":"v46ma3b"},{"t":"ambiguous","k":"v9b5ub5"},{"t":"analyse","k":"vf1wwvm"},{"t":"background music","k":"vozmoqu"},{"t":"base","k":"vyke7b4"},{"t":"base verb","k":"v14allhr"},{"t":"before","k":"v1vnm1bs"},{"t":"benefit","k":"vuu4vvm"},{"t":"blurry","k":"v1vsvl8l"},{"t":"brief","k":"v47konh"},{"t":"cable","k":"v47wum4"},{"t":"call to action","k":"vf06ima"},{"t":"caption","k":"v1dnkrf7"},{"t":"care","k":"vykez0g"},{"t":"catalogue","k":"vlu93ve"},{"t":"challenge","k":"vazcqmg"},{"t":"check","k":"v482b0j"},{"t":"choose","k":"v1wd815y"},{"t":"clear","k":"v485dvw"},{"t":"compare","k":"v1mnkjjg"},{"t":"content","k":"v1mod4sg"},{"t":"correct","k":"v1mr59av"},{"t":"create","k":"v1wk26rd"},{"t":"customer","k":"v7txcmv"},{"t":"deadline","k":"v3t0cd7"},{"t":"decoration","k":"v13dd9gt"},{"t":"demonstration","k":"vt18trg"},{"t":"download","k":"viqenrx"},{"t":"draft","k":"v48zc3a"},{"t":"explain","k":"v10807au"},{"t":"feedback","k":"v1ugowx6"},{"t":"finally","k":"v1btrolw"},{"t":"first","k":"v4a7n9p"},{"t":"flat surface","k":"v197n0et"},{"t":"fold","k":"vykhlt6"},{"t":"foldable","k":"vge0f2"},{"t":"fullscreen","k":"vjv9y9k"},{"t":"goal","k":"vykid9k"},{"t":"highlight","k":"v8jr4wt"},{"t":"hint","k":"vykj0ag"},{"t":"holder","k":"vphd5v"},{"t":"identify","k":"vsvmach"},{"t":"imperative","k":"viqu8ij"},{"t":"improve","k":"v17icscn"},{"t":"instruction","k":"v7uuprb"},{"t":"intended user","k":"v1bk5bqn"},{"t":"learning objective","k":"v4spss0"},{"t":"logical","k":"v11o09y8"},{"t":"materials","k":"v1rmkubr"},{"t":"mentor","k":"v3qz50a"},{"t":"narration","k":"v1pbgawj"},{"t":"next","k":"vyknjk4"},{"t":"not yet","k":"v9kc8a0"},{"t":"open","k":"vykok1j"},{"t":"organised","k":"v12xtpdt"},{"t":"pencil case","k":"v1nypg7w"},{"t":"phone stand","k":"v18gubsp"},{"t":"place","k":"v4hbqdm"},{"t":"post","k":"vykpbaj"},{"t":"postpone","k":"vlk66u5"},{"t":"practice","k":"v2mgcgg"},{"t":"predict","k":"v1hywnqo"},{"t":"preview","k":"v1hzaix3"},{"t":"price","k":"v4hgjh4"},{"t":"priority","k":"v81aap3"},{"t":"procedure text","k":"vs6wzeb"},{"t":"promotion","k":"v10ttpsc"},{"t":"reason","k":"v6z74zx"},{"t":"reflection","k":"v117sks0"},{"t":"remove","k":"v6zgak3"},{"t":"revise","k":"v6zn303"},{"t":"safe","k":"vykradg"},{"t":"safety","k":"v7jrstt"},{"t":"save","k":"vykras4"},{"t":"self-check","k":"v1i5r456"},{"t":"sequence words","k":"vhdxpcd"},{"t":"settings","k":"v59z40m"},{"t":"sound effects","k":"vp9brim"},{"t":"source","k":"v7tzi46"},{"t":"spill","k":"v4jj9ft"},{"t":"stable","k":"v7x2tmo"},{"t":"stationery","k":"vdx2f93"},{"t":"step","k":"vykrqbl"},{"t":"store","k":"v4jmhjm"},{"t":"structure","k":"v1dshiye"},{"t":"success criteria","k":"v1cv4ui9"},{"t":"summary","k":"v1d491v7"},{"t":"support","k":"v1d6fy02"},{"t":"then","k":"vyks7ys"},{"t":"tidy up","k":"v1qjeytg"},{"t":"timer","k":"v4k3dl2"},{"t":"tools","k":"v4k81ti"},{"t":"trust","k":"v4kai87"},{"t":"try again","k":"v19gch0k"},{"t":"unsure","k":"v93u8mf"},{"t":"useful","k":"v97277d"},{"t":"volume","k":"v9rp2il"},{"t":"warning","k":"v1eobgjf"},{"t":"write","k":"v4mehcg"}];
+const $=s=>document.querySelector(s);
+const REC={}; /* key -> {blob, ext, url} */
+let sel=null, mediaRec=null, recKey=null, stream=null, chunks=[], anaRAF=null, curAudio=null;
+const MIME=['audio/mp4','audio/webm;codecs=opus','audio/webm','audio/ogg;codecs=opus'].find(m=>window.MediaRecorder&&MediaRecorder.isTypeSupported&&MediaRecorder.isTypeSupported(m))||'';
+const extOf=t=>/mp4|aac|m4a/.test(t)?'m4a':/ogg/.test(t)?'ogg':/mpeg|mp3/.test(t)?'mp3':/wav/.test(t)?'wav':'webm';
+function msg(t,ok){ const m=$('#msg'); m.className='msg show '+(ok?'ok':'err'); m.innerHTML=t; clearTimeout(msg.t); msg.t=setTimeout(()=>m.className='msg',6000); }
+
+/* ---- storage (IndexedDB) so work survives closing the tab ---- */
+let db=null;
+function openDB(){ return new Promise(res=>{ try{ const r=indexedDB.open('satamart_voice',1); r.onupgradeneeded=()=>r.result.createObjectStore('rec'); r.onsuccess=()=>{ db=r.result; res(); }; r.onerror=()=>res(); }catch(e){ res(); } }); }
+function dbPut(k,v){ try{ if(db) db.transaction('rec','readwrite').objectStore('rec').put(v,k); }catch(e){} }
+function dbDel(k){ try{ if(db) db.transaction('rec','readwrite').objectStore('rec').delete(k); }catch(e){} }
+function dbAll(){ return new Promise(res=>{ try{ if(!db) return res([]); const out=[]; const c=db.transaction('rec').objectStore('rec').openCursor(); c.onsuccess=e=>{ const cur=e.target.result; if(cur){ out.push([cur.key,cur.value]); cur.continue(); } else res(out); }; c.onerror=()=>res(out); }catch(e){ res([]); } }); }
+
+/* ---- render ---- */
+function card(l,i,opt){ return `<div class="line" id="L_${l.k}" data-k="${l.k}" tabindex="0">
+  <div class="no">${opt?'·':i+1}</div><div style="min-width:0">
+   ${l.where&&!opt?`<div class="sub" style="font-weight:800">${l.where}</div>`:''}
+   <div class="txt">${l.t.replace(/&/g,'&amp;').replace(/</g,'&lt;')}</div>
+   <div class="ctl"><button class="btn rec" data-r="${l.k}">● Rekam</button><button class="btn ghost" data-p="${l.k}" disabled>▶ Putar</button>
+     <span class="lvl" id="V_${l.k}"><i></i></span><span class="st" id="S_${l.k}">Belum direkam</span>
+     <label class="up">atau unggah file<input type="file" accept="audio/*" data-u="${l.k}"></label>
+     <button class="btn ghost" data-x="${l.k}" hidden>✕ Hapus</button><span class="fname">${l.k}</span></div></div></div>`; }
+$('#main').innerHTML=LINES.map((l,i)=>card(l,i)).join(''); $('#opt').innerHTML=WORDS.map((l,i)=>card(l,i,true)).join(''); $('#ocnt').textContent=WORDS.length+' kata';
+const ALL=[...LINES,...WORDS];
+function refresh(k){ const r=REC[k], el=$('#L_'+k); if(!el) return; el.classList.toggle('done',!!r);
+  el.querySelector('[data-p]').disabled=!r; el.querySelector('[data-x]').hidden=!r;
+  const s=$('#S_'+k); s.className='st'+(r?' ok':''); s.textContent=r?`✓ Terekam (${(r.blob.size/1024).toFixed(0)} KB)`:'Belum direkam';
+  const n=LINES.filter(l=>REC[l.k]).length; $('#cnt').textContent=`${n}/${LINES.length}`; $('#pm').style.width=(100*n/LINES.length)+'%'; }
+function select(k,scroll){ sel=k; document.querySelectorAll('.line').forEach(e=>e.classList.toggle('sel',e.dataset.k===k)); if(scroll){ const e=$('#L_'+k); if(e) e.scrollIntoView({block:'center',behavior:'smooth'}); } }
+function setRec(k,blob){ if(REC[k]) URL.revokeObjectURL(REC[k].url); REC[k]={blob, ext:extOf(blob.type), url:URL.createObjectURL(blob)}; dbPut(k,{blob,type:blob.type}); refresh(k); }
+
+/* ---- record ---- */
+async function startRec(k){
+  if(!window.MediaRecorder||!navigator.mediaDevices){ msg('Browser ini tidak bisa merekam. Gunakan Chrome atau Edge terbaru, atau unggah file rekaman.'); return; }
+  stopAll();
+  try{ stream=stream||await navigator.mediaDevices.getUserMedia({audio:{echoCancellation:true,noiseSuppression:true,autoGainControl:true}}); }
+  catch(e){ msg('Mikrofon tidak bisa dibuka. Izinkan akses mikrofon di browser. Jika halaman dibuka dari file di komputer, buka lewat situs GitHub Pages (https) atau gunakan Chrome.'); return; }
+  chunks=[]; recKey=k; select(k);
+  mediaRec=new MediaRecorder(stream, MIME?{mimeType:MIME, audioBitsPerSecond:96000}:undefined);
+  mediaRec.ondataavailable=e=>{ if(e.data.size) chunks.push(e.data); };
+  mediaRec.onstop=()=>{ const b=new Blob(chunks,{type:mediaRec.mimeType||MIME||'audio/webm'}); const key=recKey; recKey=null; setBtn(key,false); cancelAnimationFrame(anaRAF); $('#V_'+key+' i').style.width='0';
+    if(b.size<1500){ msg('Rekaman terlalu pendek. Coba lagi.'); return; } setRec(key,b); };
+  mediaRec.start(); setBtn(k,true); meter(k);
+}
+function stopRec(){ if(mediaRec&&mediaRec.state==='recording') mediaRec.stop(); }
+function setBtn(k,on){ const b=document.querySelector(`[data-r="${k}"]`); if(!b) return; b.classList.toggle('on',on); b.textContent=on?'■ Stop':(REC[k]?'● Rekam ulang':'● Rekam'); }
+function meter(k){ try{ const ac=meter.ac||(meter.ac=new AudioContext()); const src=ac.createMediaStreamSource(stream); const an=ac.createAnalyser(); an.fftSize=512; src.connect(an); const d=new Uint8Array(an.fftSize);
+  (function loop(){ an.getByteTimeDomainData(d); let m=0; for(const v of d) m=Math.max(m,Math.abs(v-128)); const el=$('#V_'+k+' i'); if(el) el.style.width=Math.min(100,m/1.1)+'%'; if(recKey===k) anaRAF=requestAnimationFrame(loop); })(); }catch(e){} }
+function play(k){ stopAll(); const r=REC[k]; if(!r) return; curAudio=new Audio(r.url); curAudio.play().catch(()=>msg('File ini tidak bisa diputar di browser ini.')); select(k); }
+function stopAll(){ stopRec(); if(curAudio){ curAudio.pause(); curAudio=null; } }
+
+document.addEventListener('click',e=>{ const t=e.target.closest('button,.line'); if(!t) return;
+  if(t.dataset.r){ const k=t.dataset.r; if(recKey===k) stopRec(); else startRec(k); return; }
+  if(t.dataset.p){ play(t.dataset.p); return; }
+  if(t.dataset.x){ const k=t.dataset.x; URL.revokeObjectURL(REC[k].url); delete REC[k]; dbDel(k); refresh(k); setBtn(k,false); return; }
+  if(t.classList.contains('line')) select(t.dataset.k); });
+document.addEventListener('change',e=>{ const k=e.target.dataset.u; if(!k||!e.target.files[0]) return; const f=e.target.files[0];
+  if(!/^audio\//.test(f.type)&&!/\.(mp3|m4a|wav|ogg|webm|aac)$/i.test(f.name)){ msg('Pilih file audio (mp3, m4a, wav).'); return; }
+  setRec(k, f.type?f:new Blob([f],{type:'audio/'+f.name.split('.').pop()})); select(k); e.target.value=''; });
+document.addEventListener('keydown',e=>{ if(e.target.closest('input,textarea')) return; const keys=ALL.map(l=>l.k); const i=keys.indexOf(sel);
+  if(e.code==='Space'){ e.preventDefault(); const k=sel||keys[0]; if(recKey) stopRec(); else startRec(k); }
+  else if(e.key==='Enter'&&sel){ e.preventDefault(); play(sel); }
+  else if(e.key==='ArrowDown'){ e.preventDefault(); stopAll(); select(keys[Math.min(keys.length-1,i+1)],true); }
+  else if(e.key==='ArrowUp'){ e.preventDefault(); stopAll(); select(keys[Math.max(0,i-1)],true); } });
+
+/* ---- ZIP (stored, no compression) ---- */
+const CRC=(()=>{ const t=new Uint32Array(256); for(let n=0;n<256;n++){ let c=n; for(let k=0;k<8;k++) c=c&1?0xEDB88320^(c>>>1):c>>>1; t[n]=c>>>0; } return t; })();
+function crc32(u){ let c=0xFFFFFFFF; for(let i=0;i<u.length;i++) c=CRC[(c^u[i])&255]^(c>>>8); return (c^0xFFFFFFFF)>>>0; }
+async function makeZip(files){ const enc=new TextEncoder(); const parts=[], central=[]; let off=0;
+  for(const f of files){ const data=f.data instanceof Uint8Array?f.data:new Uint8Array(await f.data.arrayBuffer()); const name=enc.encode(f.name); const crc=crc32(data);
+    const h=new DataView(new ArrayBuffer(30)); h.setUint32(0,0x04034b50,true); h.setUint16(4,20,true); h.setUint16(8,0,true); h.setUint32(14,crc,true); h.setUint32(18,data.length,true); h.setUint32(22,data.length,true); h.setUint16(26,name.length,true);
+    parts.push(new Uint8Array(h.buffer),name,data);
+    const c=new DataView(new ArrayBuffer(46)); c.setUint32(0,0x02014b50,true); c.setUint16(4,20,true); c.setUint16(6,20,true); c.setUint32(16,crc,true); c.setUint32(20,data.length,true); c.setUint32(24,data.length,true); c.setUint16(28,name.length,true); c.setUint32(42,off,true);
+    central.push(new Uint8Array(c.buffer),name); off+=30+name.length+data.length; }
+  const csize=central.reduce((a,b)=>a+b.length,0); const e=new DataView(new ArrayBuffer(22)); e.setUint32(0,0x06054b50,true); e.setUint16(8,files.length,true); e.setUint16(10,files.length,true); e.setUint32(12,csize,true); e.setUint32(16,off,true);
+  return new Blob([...parts,...central,new Uint8Array(e.buffer)],{type:'application/zip'}); }
+$('#dl').onclick=async()=>{ const ks=Object.keys(REC); if(!ks.length){ msg('Belum ada rekaman.'); return; }
+  const files=ks.map(k=>({name:k+'.'+REC[k].ext, data:REC[k].blob}));
+  const map={}; ks.forEach(k=>map[k]=k+'.'+REC[k].ext);
+  files.push({name:'list.js', data:new TextEncoder().encode('/* Made by the SataMart recording studio. */\nwindow.SATAMART_AUDIO = '+JSON.stringify(map,null,1)+';\n')});
+  try{ const z=await makeZip(files); const a=document.createElement('a'); a.href=URL.createObjectURL(z); a.download='SataMart_audio.zip'; document.body.appendChild(a); a.click(); a.remove();
+    msg(`✓ ${ks.length} rekaman diunduh sebagai <b>SataMart_audio.zip</b>. Ekstrak, lalu masukkan isinya ke folder <b>assets/audio</b>.`,true); }
+  catch(e){ msg('Unduhan gagal: '+e.message); } };
+
+/* ---- start ---- */
+openDB().then(dbAll).then(rows=>{ rows.forEach(([k,v])=>{ if(!ALL.find(l=>l.k===k)) return; const b=v.blob instanceof Blob?v.blob:new Blob([v.blob],{type:v.type}); REC[k]={blob:b, ext:extOf(b.type||v.type||''), url:URL.createObjectURL(b)}; });
+  ALL.forEach(l=>{ refresh(l.k); setBtn(l.k,false); }); select(LINES[0].k);
+  if(!MIME && window.MediaRecorder) msg('Browser ini mungkin tidak mendukung rekaman dengan baik. Gunakan Chrome atau Edge.');
+  if(!window.MediaRecorder) msg('Browser ini tidak bisa merekam. Gunakan Chrome atau Edge, atau unggah file rekaman per kalimat.'); });
+</script>
+</body>
+</html>

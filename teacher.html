@@ -1,0 +1,326 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Dasbor Guru SataMart</title>
+<style>
+/* Layout: one scrolling report page — sources bar, summary, difficulty ranking, then the class roster. */
+:root{
+  --navy:#1D2A5B; --navy-2:#2E3F7F; --red:#D3263A; --gold:#F2B21B; --teal:#1E9C8E; --warn:#B4461A;
+  --bg:#F6F1E7; --paper:#FFFDF8; --ink:#1A2140; --muted:#5B6280; --line:#E3D9C6; --soft:#EEF2FF;
+  --f:"Nunito","Segoe UI",system-ui,-apple-system,sans-serif; --fd:"Fredoka","Trebuchet MS","Segoe UI",system-ui,sans-serif;
+  color-scheme:light;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 var(--f);}
+.wrap{max-width:1180px;margin:0 auto;padding-block:20px 60px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));}
+h1,h2,h3{font-family:var(--fd);color:var(--navy);margin:0;line-height:1.2;text-wrap:balance}
+h1{font-size:30px} h2{font-size:22px;margin-bottom:10px} h3{font-size:17px}
+header{display:flex;flex-wrap:wrap;align-items:center;gap:12px;justify-content:space-between;margin-bottom:16px}
+.brand{display:flex;align-items:center;gap:10px}
+.dot{width:38px;height:38px;border-radius:10px;background:var(--red);color:#fff;display:grid;place-items:center;font-family:var(--fd);font-weight:700;font-size:20px;border:3px solid #fff;box-shadow:0 2px 0 var(--navy)}
+.sub{color:var(--muted);font-size:14px}
+section{background:var(--paper);border:2px solid var(--line);border-radius:18px;padding:18px;margin-top:16px}
+.row{display:flex;flex-wrap:wrap;gap:10px;align-items:end}
+.row>*{min-width:0}
+label{font-weight:800;font-size:13px;display:block;margin-bottom:3px;color:var(--navy)}
+input,select{font:inherit;border:2px solid var(--line);border-radius:10px;padding:8px 10px;background:#fff;width:100%}
+input:focus,select:focus{outline:none;border-color:var(--navy)}
+:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+.btn{font:inherit;font-weight:800;border:0;border-radius:10px;padding:9px 16px;cursor:pointer;background:var(--navy);color:#fff;white-space:nowrap}
+.btn.red{background:var(--red)} .btn.ghost{background:#fff;color:var(--navy);border:2px solid var(--navy)} .btn.sm{padding:5px 10px;font-size:14px}
+.btn:hover{filter:brightness(1.08)}
+.status{font-weight:700;font-size:14px;margin-top:8px}
+.status.ok{color:var(--teal)} .status.err{color:var(--warn)} .status.demo{color:var(--red)}
+.tiles{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.tile{background:#fff;border:2px solid var(--line);border-radius:14px;padding:12px 14px}
+.tile .k{font-size:12px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.tile .v{font-family:var(--fd);font-size:30px;color:var(--navy);font-variant-numeric:tabular-nums}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.grid2>*{min-width:0}
+.bar{display:flex;height:22px;border-radius:6px;overflow:hidden;background:#ECE6DA}
+.bar i{display:block;height:100%}
+.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:13px;color:var(--muted);margin:6px 0 10px}
+.legend b{display:inline-block;width:12px;height:12px;border-radius:3px;vertical-align:-1px;margin-right:4px}
+.mrow{display:grid;grid-template-columns:200px 1fr 112px;gap:10px;align-items:center;margin:6px 0;font-size:14px}
+.mrow .t{font-variant-numeric:tabular-nums;color:var(--muted);text-align:right}
+.hard{display:grid;grid-template-columns:28px 1fr 200px;gap:10px;align-items:center;padding:9px 0;border-bottom:1px solid var(--line)}
+.hard .n{font-family:var(--fd);font-size:18px;color:var(--red);text-align:center}
+.hard .lbl b{color:var(--navy)} .hard .lbl .m{display:inline-block;font-size:12px;font-weight:800;background:var(--navy);color:#fff;border-radius:6px;padding:0 6px;margin-right:6px}
+.hard .why{font-size:13px;color:var(--muted)}
+.meter{height:10px;border-radius:5px;background:#ECE6DA;overflow:hidden}
+.meter i{display:block;height:100%;background:var(--red)}
+.tblwrap{overflow-x:auto;border:2px solid var(--line);border-radius:12px}
+table{width:100%;border-collapse:collapse;font-size:14px;background:#fff}
+th{background:var(--navy);color:#fff;text-align:left;padding:8px 10px;white-space:nowrap;cursor:pointer;position:sticky;top:0}
+td{padding:8px 10px;border-bottom:1px solid var(--line);white-space:nowrap;font-variant-numeric:tabular-nums}
+tr:nth-child(even) td{background:#FFF8EC}
+tbody tr{cursor:pointer} tbody tr:hover td{background:var(--soft)}
+.pill{display:inline-block;border-radius:999px;padding:1px 9px;font-size:12px;font-weight:800}
+.p-done{background:var(--teal);color:#fff} .p-prog{background:#D7E1FF;color:var(--navy)} .p-ready{background:var(--gold);color:var(--navy)} .p-lock{background:#E8E5EE;color:#555}
+.flag{color:var(--warn);font-weight:800}
+.note{background:var(--soft);border:2px solid var(--navy-2);border-radius:12px;padding:10px 14px;font-size:14px}
+.insight{background:#FFF3D6;border:2px solid var(--gold);border-radius:12px;padding:12px 16px}
+.insight li{margin:4px 0}
+dialog{border:3px solid var(--navy);border-radius:18px;padding:0;max-width:min(940px,96vw);width:100%;background:var(--paper)}
+dialog::backdrop{background:rgba(20,26,51,.55)}
+.dh{background:var(--navy);color:#fff;padding:12px 18px;display:flex;align-items:center;gap:10px}
+.dh h2{color:#fff;margin:0}
+.db{padding:16px 18px;max-height:75vh;overflow:auto}
+pre{white-space:pre-wrap;background:#fff;border:2px solid var(--line);border-radius:10px;padding:10px 12px;font:14px/1.5 var(--f);margin:6px 0 12px}
+code.blk{display:block;white-space:pre;overflow:auto;background:#1A2140;color:#E8ECFF;border-radius:10px;padding:12px;font:13px/1.45 ui-monospace,Menlo,Consolas,monospace;max-height:340px}
+details summary{cursor:pointer;font-weight:800;color:var(--navy)}
+ol li{margin:5px 0}
+.empty{color:var(--muted);font-style:italic;padding:8px 0}
+@media (max-width:760px){.tiles{grid-template-columns:1fr 1fr}.grid2{grid-template-columns:1fr}.mrow{grid-template-columns:120px 1fr 60px}.hard{grid-template-columns:24px 1fr}.hard>div:last-child{grid-column:2}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <div class="brand"><span class="dot">S</span><div><h1>Dasbor Guru SataMart</h1><div class="sub">Pantau progres siswa dan temukan bagian gim yang paling sulit.</div></div></div>
+  <div class="row"><button class="btn ghost" id="csvBtn">Ekspor CSV</button><button class="btn ghost" id="refresh">Muat ulang</button></div>
+</header>
+
+<section>
+  <h2>Sumber data</h2>
+  <div class="row">
+    <div style="flex:3 1 340px"><label for="url">URL Web App Google Apps Script</label><input id="url" type="text" placeholder="https://script.google.com/macros/s/…/exec"></div>
+    <div style="flex:1 1 160px"><label for="key">Kunci guru</label><input id="key" type="password" placeholder="kunci rahasia"></div>
+    <button class="btn" id="load">Muat data</button>
+  </div>
+  <div class="row" style="margin-top:10px">
+    <div style="flex:1 1 300px"><label for="files">Atau impor file progres siswa (.json) — untuk kelas tanpa internet</label><input id="files" type="file" accept=".json,application/json" multiple></div>
+    <button class="btn ghost" id="demo">Tampilkan contoh data</button>
+  </div>
+  <div id="status" class="status demo">Menampilkan CONTOH DATA (bukan data siswa Ibu/Bapak). Muat data atau impor file untuk melihat data asli.</div>
+</section>
+
+<section>
+  <div class="row" style="justify-content:space-between;align-items:center"><h2 style="margin:0">Ringkasan kelas</h2>
+    <div class="row"><div><label for="fcls">Kelas</label><select id="fcls"></select></div><div><label for="fq">Cari nama</label><input id="fq" type="text" placeholder="Nama siswa"></div></div></div>
+  <div class="tiles" style="margin-top:12px" id="tiles"></div>
+</section>
+
+<section>
+  <h2>Bagian paling sulit</h2>
+  <div class="insight" id="insight"></div>
+  <p class="sub" style="margin:10px 0 4px">Diurutkan menurut tingkat kesulitan: persentase siswa yang belum tepat pada percobaan pertama, ditambah rata-rata jumlah percobaan salah. Hanya aktivitas yang sudah dicoba minimal 1 siswa.</p>
+  <div id="hard"></div>
+</section>
+
+<div class="grid2">
+<section>
+  <h2>Progres per misi</h2>
+  <div class="legend"><span><b style="background:var(--teal)"></b>Selesai</span><span><b style="background:#8EA2E8"></b>Sedang dikerjakan</span><span><b style="background:#ECE6DA"></b>Belum mulai/terkunci</span></div>
+  <div id="missions"></div>
+  <p class="sub">Angka kanan: rata-rata waktu di misi (menit), hanya siswa yang sudah membuka misi.</p>
+</section>
+<section>
+  <h2>Di mana siswa paling sering minta bantuan bahasa</h2>
+  <p class="sub" style="margin-top:-4px">Jumlah klik tombol Assistance (kosakata) dan Handbook per halaman. Angka tinggi menandakan kesulitan bahasa/konsep.</p>
+  <div id="assist"></div>
+</section>
+</div>
+
+<section>
+  <h2>Daftar siswa</h2>
+  <p class="sub" style="margin-top:-4px">Klik baris untuk melihat detail jawaban dan tulisan siswa. Tanda ⚠ = perlu perhatian (banyak percobaan salah, atau lama tidak bergerak dari satu misi).</p>
+  <div class="tblwrap"><table id="tbl"><thead><tr>
+    <th data-s="name">Nama</th><th data-s="cls">Kelas</th><th data-s="xp">XP</th><th data-s="done">Misi</th><th data-s="cur">Posisi terakhir</th><th data-s="quiz">Kuis (awal → akhir)</th><th data-s="wrong">Percobaan salah</th><th data-s="helps">Bantuan</th><th data-s="time">Waktu</th><th data-s="updated">Pembaruan</th>
+  </tr></thead><tbody></tbody></table></div>
+</section>
+
+<section>
+  <details id="setup"><summary>Panduan pemasangan Google Sheets (sekali saja)</summary>
+  <ol>
+    <li>Buka <b>Google Sheets</b>, buat spreadsheet baru, beri nama misalnya <i>Progres SataMart</i>.</li>
+    <li>Klik menu <b>Extensions → Apps Script</b>. Hapus kode yang ada, lalu tempel kode di bawah ini.</li>
+    <li>Ganti <code>GANTI_KUNCI_GURU</code> dengan kunci rahasia buatan Ibu/Bapak (contoh: <i>satamart-xibd-2026</i>). Klik ikon simpan.</li>
+    <li>Klik <b>Deploy → New deployment</b>. Pilih jenis <b>Web app</b>. <i>Execute as</i>: <b>Me</b>. <i>Who has access</i>: <b>Anyone</b>. Klik <b>Deploy</b>, izinkan akses akun Google Ibu/Bapak.</li>
+    <li>Salin <b>Web app URL</b> (berakhiran <code>/exec</code>).</li>
+    <li>Di repository GitHub, buka file <b>assets/config.js</b>, klik ikon pensil, tempel URL di antara tanda kutip <code>sheetUrl: ''</code>, lalu <b>Commit changes</b>.</li>
+    <li>Buka dasbor ini, tempel URL yang sama dan kunci guru, klik <b>Muat data</b>.</li>
+  </ol>
+  <p class="note">Siswa hanya bisa <b>mengirim</b> progres. Membaca data memerlukan kunci guru. Data tersimpan di Google Sheet milik Ibu/Bapak sendiri. Jika kode Apps Script diubah, lakukan <b>Deploy → Manage deployments → Edit → New version</b>.</p>
+  <div class="row" style="justify-content:space-between;align-items:center;margin-top:10px"><h3>Kode Apps Script</h3><button class="btn sm" id="copyCode">Salin kode</button></div>
+  <code class="blk" id="gs"></code>
+  </details>
+</section>
+</div>
+
+<dialog id="dlg"><div class="dh"><h2 id="dt"></h2><span style="flex:1"></span><button class="btn sm ghost" id="dclose">Tutup</button></div><div class="db" id="dbody"></div></dialog>
+
+<script src="assets/config.js"></script>
+<script>
+const ITEMS={"qc_promo":["M1","Quick Check: why check before posting"],"qc_guide":["M1","Quick Check: the clearer instruction"],"m2a":["M2","Label the structure (goal, materials, steps)"],"m2b":["M2","Meaning of action verbs"],"m2c":["M2","Base verb: \"Choose a clear photo\""],"m2o":["M2","Order the promotion steps"],"m2p":["M2","Choose the clear product photo"],"hunt":["M2","Hazard Hunt: find K3LH hazards"],"m2x":["M2","Explain a safety fix"],"gap":["M3","Fill gaps: photo, benefit, price"],"mk1p":["M3","MK001 Step 1: choose photo"],"mk1n":["M3","MK001 Step 2: product name"],"mk1b":["M3","MK001 Step 3: true benefit from product card"],"mk1r":["M3","MK001 Step 4: price"],"mk1c":["M3","MK001 Step 4: call to action"],"mk1check":["M3","MK001 Step 5: check & preview"],"mk2p":["M3","MK002 Fix: photo"],"mk2c":["M3","MK002 Fix: name & benefit"],"mk2r":["M3","MK002 Fix: price"],"mk2a":["M3","MK002 Fix: call to action"],"mk2why":["M3","MK002 Explain one fix"],"prio":["M3","Priority plan (20 minutes)"],"prioWhy":["M3","Reason to postpone tasks"],"sop":["M3","Write a mini SOP"],"swipe":["M4","Clear or Confusing? (spot vague instructions)"],"dash":["M4","Rush Hour Service (follow the SOP order)"],"boss":["M5","Boss battle: The Muddler (clear instructions)"],"plan":["M5","Complete the planner"],"draft":["M5","Draft completeness (goal, steps, sequence words)"],"test":["M6","Test the guide (checklist & comment)"],"rev":["M6","Revise and give a reason"],"q6_0":["M6","Quiz 1: identify the goal"],"q6_1":["M6","Quiz 2: imperative base verb"],"q6_2":["M6","Quiz 3: fix the order"],"q6_3":["M6","Quiz 4: safety (K3LH)"],"q6_4":["M6","Quiz 5: check before posting"],"q6_5":["M6","Quiz 6: fix an ambiguous instruction"],"refl":["M6","Reflection answers"]};
+const MISSIONS=[{"id":"M0","name":"First Day at SataMart","xp":50},{"id":"M1","name":"Passport to Promotion","xp":100},{"id":"M2","name":"SOP Detective Lab","xp":130},{"id":"M3","name":"Content Creator Studio","xp":200},{"id":"M4","name":"Rush Hour Challenge","xp":120},{"id":"M5","name":"Boss Level: Guide Maker","xp":200},{"id":"M6","name":"Test Drive & Level Up","xp":200}];
+const GS = `/* SataMart Procedure Quest — penerima progres siswa */
+const KUNCI_GURU = 'GANTI_KUNCI_GURU';
+const NAMA_SHEET = 'Progres';
+
+function lembar_(){ const ss = SpreadsheetApp.getActiveSpreadsheet();
+  const s = ss.getSheetByName(NAMA_SHEET) || ss.insertSheet(NAMA_SHEET);
+  if (s.getLastRow() === 0) s.appendRow(['Diperbarui','ID siswa','Nama','Kelas','XP','Misi selesai','Posisi','Data (JSON)']);
+  return s; }
+
+function doPost(e){
+  const lock = LockService.getScriptLock(); lock.waitLock(20000);
+  try {
+    const d = JSON.parse(e.postData.contents);
+    if (!d.id || !d.name) return ContentService.createTextOutput('ignored');
+    const s = lembar_(); const n = s.getLastRow();
+    const ids = n > 1 ? s.getRange(2, 2, n - 1, 1).getValues().map(r => r[0]) : [];
+    const row = [new Date(), d.id, d.name, d.cls || '', d.xp, d.done, d.cur, JSON.stringify(d).slice(0, 49000)];
+    const i = ids.indexOf(d.id);
+    if (i > -1) s.getRange(i + 2, 1, 1, row.length).setValues([row]); else s.appendRow(row);
+    return ContentService.createTextOutput('ok');
+  } finally { lock.releaseLock(); }
+}
+
+function doGet(e){
+  const cb = e.parameter.callback;
+  let out;
+  if (e.parameter.key !== KUNCI_GURU) out = {error: 'Kunci guru salah'};
+  else { const s = lembar_(); const n = s.getLastRow();
+    const v = n > 1 ? s.getRange(2, 8, n - 1, 1).getValues().map(r => r[0]) : [];
+    out = {students: v.map(x => { try { return JSON.parse(x); } catch (err) { return null; } }).filter(Boolean)}; }
+  const t = JSON.stringify(out);
+  return cb ? ContentService.createTextOutput(cb + '(' + t + ')').setMimeType(ContentService.MimeType.JAVASCRIPT)
+            : ContentService.createTextOutput(t).setMimeType(ContentService.MimeType.JSON);
+}`;
+const $=s=>document.querySelector(s), esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const CHNAME = {hunt:'Hazard Hunt (M2)', swipe:'Clear or Confusing? (M4)', dash:'Rush Hour Service (M4)', boss:'Boss battle: The Muddler (M5)',_old:'The Confused Customer (M5)'};
+const MNAME = Object.fromEntries(MISSIONS.map(m=>[m.id,m.name]));
+const SCRNAME = s => MNAME[s] ? s+' · '+MNAME[s] : ({cover:'Sampul',player:'Isi nama',intro:'Perkenalan',map:'Peta toko',report:'Laporan akhir',bye:'Keluar'}[s]||s||'-');
+let ALL=[], DEMO=true, sortK='name', sortDir=1;
+
+/* ---------- sample data (clearly marked) ---------- */
+function demoData(){
+  let seed=7; const rnd=()=>{ seed=(seed*16807)%2147483647; return seed/2147483647; };
+  const names=['Ayu (contoh)','Bima (contoh)','Citra (contoh)','Dewa (contoh)','Eka (contoh)','Fajar (contoh)','Gita (contoh)','Hendra (contoh)','Intan (contoh)','Joko (contoh)','Komang (contoh)','Luh (contoh)'];
+  const hardness={m2o:.55,mk1b:.6,prio:.7,rush_c1:.5,draft:.65,q6_3:.35,q6_2:.45,m2b:.4,gap:.3,mk2why:.45,rev:.4,m2c:.25,qc_guide:.15};
+  const ids=Object.keys(ITEMS);
+  return names.map((n,k)=>{ const reach=Math.min(7, 2+Math.floor(rnd()*6.5)); const items={};
+    ids.forEach(id=>{ const mi=+ITEMS[id][0][1]; if(mi>reach) return; if(mi===reach && rnd()<.5) return;
+      const h=hardness[id]??.12; const first=rnd()>h; const wrong=first?0:1+Math.floor(rnd()*3*h*2);
+      items[id]={tries:wrong+1,wrong,first,done:!(mi===reach&&rnd()<.3),at:0}; });
+    const missions={}; let xp=0; MISSIONS.forEach((m,i)=>{ const st=i<reach?'done':i===reach?'prog':'lock'; if(st==='done') xp+=m.xp; missions[m.id]={st,xp:st==='done'?m.xp:0,t:st==='lock'?0:Math.round(200+rnd()*900),start:0,end:0}; });
+    return {v:1,id:'demo'+k,name:n,cls:k<6?'XI BD 1':'XI BD 2',updated:new Date(Date.now()-rnd()*5*864e5).toISOString(),xp,done:reach,cur:reach<7?MISSIONS[reach].id:'report',helps:Math.floor(rnd()*12),
+      missions,items,chal:Object.fromEntries([['hunt',2],['swipe',4],['dash',4],['boss',5]].filter(([k,m])=>m<reach).map(([k])=>[k,{best:1+Math.floor(rnd()*3),plays:1+Math.floor(rnd()*3),done:true,feel:['Confident','Okay','Still unsure'][Math.floor(rnd()*3)],helped:'Looking slowly',last:{mode:rnd()>.5?'relaxed':'challenge'}}])),assist:{M2:Math.floor(rnd()*4),M3:Math.floor(rnd()*5),M5:Math.floor(rnd()*6)},book:{M5:Math.floor(rnd()*3)},quiz:{first:reach>=7?3+Math.floor(rnd()*4):0,now:reach>=7?6:0},
+      work:{draft:reach>=6?'How to Use a Foldable Phone Stand\n\nThis guide helps you set up your phone.\n\nFirst, place the stand on a flat surface.\nNext, open the support.\nThen, put it there.\nFinally, fold the stand.':'',refl:{q1:'',q2:'',q3:''},test:{checks:{},comment:''},plan:{}}}; });
+}
+
+/* ---------- loading ---------- */
+function setStatus(msg,cls){ const s=$('#status'); s.className='status '+cls; s.innerHTML=msg; }
+function jsonp(url,key){ return new Promise((res,rej)=>{ const cb='sm_cb'+Date.now(); const sc=document.createElement('script');
+  const done=()=>{ clearTimeout(t); delete window[cb]; sc.remove(); };
+  const t=setTimeout(()=>{ done(); rej(new Error('Tidak ada jawaban dari server (15 detik). Periksa URL dan koneksi internet.')); },15000);
+  window[cb]=d=>{ done(); res(d); }; sc.onerror=()=>{ done(); rej(new Error('URL tidak dapat dibuka. Pastikan URL berakhiran /exec dan akses Web app = Anyone.')); };
+  sc.src=url+(url.includes('?')?'&':'?')+'key='+encodeURIComponent(key)+'&callback='+cb+'&t='+Date.now(); document.body.appendChild(sc); }); }
+async function loadSheet(){ const url=$('#url').value.trim(), key=$('#key').value;
+  if(!/^https:\/\/script\.google(usercontent)?\.com\//.test(url)){ setStatus('Isi URL Web App Google Apps Script (diawali https://script.google.com/…).','err'); return; }
+  if(!key){ setStatus('Isi kunci guru.','err'); return; }
+  try{ localStorage.setItem('sm_t_url',url); sessionStorage.setItem('sm_t_key',key); }catch(e){}
+  setStatus('Memuat data…','ok');
+  try{ const d=await jsonp(url,key); if(d.error){ setStatus(esc(d.error)+'.','err'); return; }
+    ALL=merge([], d.students||[]); DEMO=false; render(); setStatus(`Data dimuat: ${ALL.length} siswa · ${new Date().toLocaleTimeString('id-ID')}`,'ok');
+  }catch(e){ setStatus(esc(e.message),'err'); } }
+function merge(base, add){ const m=new Map(base.map(s=>[s.id,s])); add.forEach(s=>{ if(!s||!s.id) return; const o=m.get(s.id); if(!o || String(s.updated)>String(o.updated)) m.set(s.id,s); }); return [...m.values()]; }
+$('#files').addEventListener('change', async e=>{ const fs=[...e.target.files]; const got=[]; let bad=0;
+  for(const f of fs){ try{ const d=JSON.parse(await f.text()); (Array.isArray(d)?d:[d]).forEach(x=>got.push(x)); }catch(err){ bad++; } }
+  ALL=merge(DEMO?[]:ALL, got); DEMO=false; render(); setStatus(`${got.length} file progres diimpor${bad?`, ${bad} file tidak terbaca`:''}. Total ${ALL.length} siswa.`, bad?'err':'ok'); e.target.value=''; });
+$('#load').onclick=loadSheet; $('#refresh').onclick=()=>DEMO?render():loadSheet();
+$('#demo').onclick=()=>{ ALL=demoData(); DEMO=true; render(); setStatus('Menampilkan CONTOH DATA (bukan data siswa Ibu/Bapak).','demo'); };
+
+/* ---------- analysis ---------- */
+const view = () => { const c=$('#fcls').value, q=$('#fq').value.trim().toLowerCase(); return ALL.filter(s=>(!c||s.cls===c)&&(!q||String(s.name).toLowerCase().includes(q))); };
+const sumWrong = s => Object.values(s.items||{}).reduce((a,r)=>a+(r.wrong||0),0);
+const totTime = s => Object.values(s.missions||{}).reduce((a,m)=>a+(m.t||0),0);
+const fmtMin = sec => sec>=60? Math.round(sec/60)+' mnt' : (sec?'<1 mnt':'-');
+function needs(s){ const w=sumWrong(s); const cur=s.missions&&s.missions[s.cur]; return w>=12 || (cur && cur.st!=='done' && cur.t>1500); }
+function difficulty(list){ const agg={};
+  list.forEach(s=>Object.entries(s.items||{}).forEach(([id,r])=>{ if(!ITEMS[id]) return; const a=agg[id]||(agg[id]={id,n:0,firstOk:0,wrong:0,notDone:0,who:[]}); a.n++; if(r.first) a.firstOk++; a.wrong+=r.wrong||0; if(!r.done) a.notDone++; if(!r.first) a.who.push(s.name); }));
+  return Object.values(agg).map(a=>({...a, failPct:Math.round(100*(1-a.firstOk/a.n)), avgWrong:a.wrong/a.n, score:(1-a.firstOk/a.n)+Math.min(1,a.wrong/a.n/3)})).sort((x,y)=>y.score-x.score); }
+
+/* ---------- render ---------- */
+function render(){
+  const classes=[...new Set(ALL.map(s=>s.cls).filter(Boolean))].sort(); const sel=$('#fcls'), cv=sel.value;
+  sel.innerHTML='<option value="">Semua kelas</option>'+classes.map(c=>`<option ${c===cv?'selected':''}>${esc(c)}</option>`).join('');
+  const L=view(), n=L.length;
+  const avgXP=n?Math.round(L.reduce((a,s)=>a+(s.xp||0),0)/n):0, fin=L.filter(s=>s.done>=7).length;
+  const qz=L.filter(s=>s.done>=7||(s.quiz&&s.quiz.now)); const qavg=qz.length?(qz.reduce((a,s)=>a+((s.quiz&&s.quiz.first)||0),0)/qz.length).toFixed(1):'-';
+  $('#tiles').innerHTML=[['Siswa',n],['Rata-rata XP',avgXP+' / 1000'],['Selesai semua misi',fin+' / '+n],['Kuis M6, percobaan 1',qavg+(qavg==='-'?'':' / 6')]].map(([k,v])=>`<div class="tile"><div class="k">${k}</div><div class="v">${v}</div></div>`).join('');
+  // difficulty
+  const D=difficulty(L), top=D.filter(d=>d.failPct>0).slice(0,10);
+  $('#hard').innerHTML = top.length? top.map((d,i)=>{ const it=ITEMS[d.id]; return `<div class="hard"><div class="n">${i+1}</div>
+     <div class="lbl"><span class="m">${it[0]}</span><b>${esc(it[1])}</b><div class="why">${d.failPct}% siswa belum tepat pada percobaan pertama · rata-rata ${d.avgWrong.toFixed(1)} percobaan salah · ${d.n} siswa mencoba${d.notDone?` · <span class="flag">${d.notDone} belum berhasil</span>`:''}</div></div>
+     <div><div class="meter" title="${d.failPct}%"><i style="width:${d.failPct}%"></i></div></div></div>`; }).join('') : '<p class="empty">Belum ada data aktivitas.</p>';
+  // insight sentences
+  const byM={}; D.forEach(d=>{ const m=ITEMS[d.id][0]; (byM[m]||(byM[m]=[])).push(d); });
+  const mScore=Object.entries(byM).map(([m,a])=>[m, a.reduce((x,d)=>x+d.failPct,0)/a.length]).sort((a,b)=>b[1]-a[1]);
+  const assistTot={}; L.forEach(s=>{ Object.entries(s.assist||{}).forEach(([k,v])=>assistTot[k]=(assistTot[k]||0)+v); Object.entries(s.book||{}).forEach(([k,v])=>assistTot[k]=(assistTot[k]||0)+v); });
+  const topAssist=Object.entries(assistTot).sort((a,b)=>b[1]-a[1])[0];
+  const stuck=L.filter(needs);
+  $('#insight').innerHTML = n? `<b>Kesimpulan otomatis</b><ul style="margin:6px 0 0;padding-left:20px">
+    ${top[0]?`<li>Aktivitas tersulit: <b>${esc(ITEMS[top[0].id][1])}</b> (${top[0].id.startsWith('q6')?'kuis ':''}${ITEMS[top[0].id][0]}), ${top[0].failPct}% siswa salah di percobaan pertama.</li>`:''}
+    ${mScore[0]?`<li>Misi yang paling menantang: <b>${mScore[0][0]} ${esc(MNAME[mScore[0][0]]||'')}</b> (rata-rata ${Math.round(mScore[0][1])}% salah di percobaan pertama).</li>`:''}
+    ${topAssist?`<li>Bantuan bahasa paling sering dibuka di <b>${esc(SCRNAME(topAssist[0]))}</b> (${topAssist[1]} kali).</li>`:''}
+    ${(()=>{ const un={}; L.forEach(s=>Object.entries(s.chal||{}).forEach(([k,c])=>{ if(c.feel==='Still unsure') un[k]=(un[k]||0)+1; })); const top=Object.entries(un).sort((a,b)=>b[1]-a[1])[0]; return top?`<li>Refleksi siswa: <b>${top[1]} siswa</b> merasa <i>masih ragu</i> setelah <b>${esc(CHNAME[top[0]]||top[0])}</b>.</li>`:''; })()}
+    <li>${stuck.length?`<b>${stuck.length} siswa</b> perlu perhatian: ${stuck.slice(0,6).map(s=>esc(s.name)).join(', ')}${stuck.length>6?', …':''}.`:'Tidak ada siswa yang terdeteksi tertahan lama.'}</li></ul>` : '<p class="empty">Belum ada data.</p>';
+  // missions
+  $('#missions').innerHTML = MISSIONS.map(m=>{ const c={done:0,prog:0}; let tt=0, tn=0; L.forEach(s=>{ const x=s.missions&&s.missions[m.id]; if(!x) return; if(x.st==='done') c.done++; else if(x.st==='prog') c.prog++; if(x.t){ tt+=x.t; tn++; } });
+    const pd=n?100*c.done/n:0, pp=n?100*c.prog/n:0;
+    return `<div class="mrow"><div><b>${m.id}</b> ${esc(m.name)}</div><div class="bar" title="Selesai ${c.done}, sedang ${c.prog}"><i style="width:${pd}%;background:var(--teal)"></i><i style="width:${pp}%;background:#8EA2E8"></i></div><div class="t">${c.done}/${n} · ${tn?Math.round(tt/tn/60):'-'} mnt</div></div>`; }).join('');
+  // assist
+  const AE=Object.entries(assistTot).sort((a,b)=>b[1]-a[1]); const mx=AE.length?AE[0][1]:1;
+  $('#assist').innerHTML = AE.length? AE.slice(0,9).map(([k,v])=>`<div class="mrow" style="grid-template-columns:200px 1fr 50px"><div>${esc(SCRNAME(k))}</div><div class="bar"><i style="width:${100*v/mx}%;background:var(--gold)"></i></div><div class="t">${v}×</div></div>`).join('') : '<p class="empty">Belum ada penggunaan bantuan.</p>';
+  // table
+  const rows=L.map(s=>({s, name:s.name, cls:s.cls||'', xp:s.xp||0, done:s.done||0, cur:s.cur, quiz:(s.quiz&&s.quiz.first)||0, wrong:sumWrong(s), helps:s.helps||0, time:totTime(s), updated:s.updated||''}))
+    .sort((a,b)=> (a[sortK]>b[sortK]?1:a[sortK]<b[sortK]?-1:0)*sortDir);
+  $('#tbl tbody').innerHTML = rows.length? rows.map(r=>`<tr data-id="${esc(r.s.id)}" tabindex="0"><td>${needs(r.s)?'<span class="flag" title="Perlu perhatian">⚠ </span>':''}<b>${esc(r.name)}</b></td><td>${esc(r.cls)}</td><td>${r.xp}</td><td>${r.done}/7</td><td>${esc(SCRNAME(r.cur))}</td>
+    <td>${r.s.quiz&&(r.s.quiz.first||r.s.quiz.now)?`${r.s.quiz.first}/6 → ${r.s.quiz.now}/6`:'-'}</td><td>${r.wrong}</td><td>${r.helps}</td><td>${fmtMin(r.time)}</td><td>${r.updated?new Date(r.updated).toLocaleString('id-ID',{dateStyle:'short',timeStyle:'short'}):'-'}</td></tr>`).join('')
+    : '<tr><td colspan="10" class="empty">Tidak ada siswa yang cocok dengan filter.</td></tr>';
+}
+$('#fcls').onchange=render; $('#fq').oninput=render;
+document.querySelectorAll('th[data-s]').forEach(th=>th.onclick=()=>{ const k=th.dataset.s; sortDir = sortK===k? -sortDir : (['name','cls','cur'].includes(k)?1:-1); sortK=k; render(); });
+
+/* ---------- student detail ---------- */
+function openStudent(id){ const s=ALL.find(x=>x.id===id); if(!s) return; const w=s.work||{};
+  const ST={done:['Selesai','p-done'],prog:['Sedang','p-prog'],ready:['Siap','p-ready'],lock:['Terkunci','p-lock']};
+  const items=Object.entries(s.items||{}).filter(([id])=>ITEMS[id]).sort((a,b)=>(b[1].wrong-a[1].wrong));
+  $('#dt').textContent=s.name+(s.cls?' · '+s.cls:'');
+  $('#dbody').innerHTML=`<p><b>XP</b> ${s.xp}/1000 · <b>Misi</b> ${s.done}/7 · <b>Level</b> ${esc(s.level||'-')} · <b>Bantuan dibuka</b> ${s.helps||0}× · <b>Percobaan ke-</b>${s.attempt||1} · <b>Mode M4</b> ${esc(s.rush||'-')}</p>
+   <h3 style="margin-top:12px">Misi</h3><div class="tblwrap" style="margin-top:6px"><table><thead><tr><th>Misi</th><th>Status</th><th>XP</th><th>Waktu</th></tr></thead><tbody>
+   ${MISSIONS.map(m=>{ const x=(s.missions||{})[m.id]||{st:'lock'}; const st=ST[x.st]||ST.lock; return `<tr><td>${m.id} ${esc(m.name)}</td><td><span class="pill ${st[1]}">${st[0]}</span></td><td>${x.xp||0}/${m.xp}</td><td>${fmtMin(x.t||0)}</td></tr>`; }).join('')}</tbody></table></div>
+   <h3 style="margin-top:14px">Aktivitas (urut dari yang paling banyak salah)</h3>
+   ${items.length?`<div class="tblwrap" style="margin-top:6px"><table><thead><tr><th>Misi</th><th>Aktivitas</th><th>Percobaan 1</th><th>Salah</th><th>Berhasil</th></tr></thead><tbody>${items.map(([id,r])=>`<tr><td>${ITEMS[id][0]}</td><td style="white-space:normal">${esc(ITEMS[id][1])}</td><td>${r.first?'✓ Tepat':'✗ Belum'}</td><td>${r.wrong}</td><td>${r.done?'✓':'—'}</td></tr>`).join('')}</tbody></table></div>`:'<p class="empty">Belum ada aktivitas.</p>'}
+   <h3 style="margin-top:14px">Tantangan & refleksi singkat</h3>
+   ${s.chal&&Object.keys(s.chal).length?`<div class="tblwrap" style="margin-top:6px"><table><thead><tr><th>Tantangan</th><th>Bintang terbaik</th><th>Dimainkan</th><th>Mode terakhir</th><th>Perasaan</th><th>Yang membantu</th></tr></thead><tbody>${Object.entries(s.chal).map(([k,c])=>`<tr><td>${esc(CHNAME[k]||k)}</td><td>${'★'.repeat(c.best||0)}${'☆'.repeat(3-(c.best||0))}</td><td>${c.plays||0}×</td><td>${c.last?(c.last.mode==='relaxed'?'Santai':'Tantangan'):'-'}</td><td>${esc(c.feel||'-')}</td><td style="white-space:normal">${esc(c.helped||'-')}</td></tr>`).join('')}</tbody></table></div>`:'<p class="empty">Belum ada tantangan yang dimainkan.</p>'}
+   <h3 style="margin-top:14px">Prediksi awal (M0)</h3><pre>${esc(s.pred||'-')}</pre>
+   <h3>Draf panduan produk (M5)</h3><pre>${esc(w.draft||'-')}</pre>
+   <h3>Hasil uji (M6)</h3><pre>${esc((w.test&&w.test.comment)||'-')}</pre>
+   <h3>Teks revisi (M6)</h3><pre>${esc(w.revised||'-')}</pre><p class="sub">Alasan: ${esc(w.reason||'-')}</p>
+   <h3 style="margin-top:10px">Refleksi</h3><pre>${w.refl?['What makes instructions useful? '+(w.refl.q1||'-'),'Which step did you improve? '+(w.refl.q2||'-'),'What will you practise next? '+(w.refl.q3||'-')].map(esc).join('\n'):'-'}</pre>`;
+  $('#dlg').showModal(); }
+$('#tbl tbody').addEventListener('click',e=>{ const tr=e.target.closest('tr[data-id]'); if(tr) openStudent(tr.dataset.id); });
+$('#tbl tbody').addEventListener('keydown',e=>{ const tr=e.target.closest('tr[data-id]'); if(tr&&e.key==='Enter') openStudent(tr.dataset.id); });
+$('#dclose').onclick=()=>$('#dlg').close();
+
+/* ---------- CSV ---------- */
+$('#csvBtn').onclick=()=>{ const L=view(); const ids=Object.keys(ITEMS); const q=v=>'"'+String(v??'').replace(/"/g,'""')+'"';
+  const head=['Nama','Kelas','XP','Misi selesai','Posisi','Kuis awal','Kuis akhir','Bantuan','Total salah','Waktu (menit)',...MISSIONS.map(m=>m.id+' status'),...ids.map(i=>'Salah: '+i)];
+  const lines=[head.map(q).join(',')].concat(L.map(s=>[s.name,s.cls,s.xp,s.done,SCRNAME(s.cur),s.quiz&&s.quiz.first,s.quiz&&s.quiz.now,s.helps,sumWrong(s),Math.round(totTime(s)/60),...MISSIONS.map(m=>((s.missions||{})[m.id]||{}).st||''),...ids.map(i=>((s.items||{})[i]||{}).wrong??'')].map(q).join(',')));
+  const b=new Blob(['﻿'+lines.join('\n')],{type:'text/csv'}); const a=document.createElement('a'); a.href=URL.createObjectURL(b); a.download='progres_satamart.csv'; document.body.appendChild(a); a.click(); a.remove(); };
+
+$('#gs').textContent=GS;
+$('#copyCode').onclick=()=>{ const done=m=>{ $('#copyCode').textContent=m; setTimeout(()=>$('#copyCode').textContent='Salin kode',2000); };
+  try{ navigator.clipboard.writeText(GS).then(()=>done('Tersalin ✓')).catch(()=>{ const r=document.createRange(); r.selectNodeContents($('#gs')); getSelection().removeAllRanges(); getSelection().addRange(r); done('Tekan ⌘C / Ctrl+C'); }); }catch(e){ done('Pilih lalu salin manual'); } };
+
+/* ---------- start ---------- */
+(function(){ const cfg=window.SATAMART_CONFIG||{}; let u=cfg.sheetUrl||''; try{ u=u||localStorage.getItem('sm_t_url')||''; $('#key').value=sessionStorage.getItem('sm_t_key')||''; }catch(e){}
+  $('#url').value=u; ALL=demoData(); render(); if(!u) $('#setup').open=true; else if($('#key').value) loadSheet(); })();
+</script>
+</body>
+</html>

@@ -1,0 +1,14 @@
+SataMart Procedure Quest - cara menjalankan
+1. Ekstrak ZIP ini ke satu folder.
+2. Buka index.html dengan browser (Chrome/Edge disarankan). Siswa menulis nama lengkap saat mulai.
+3. Klik Start. Musik mulai setelah klik pertama. Tombol layar penuh ada di pojok kanan atas.
+
+DASBOR GURU
+- Buka teacher.html. Panduan pemasangan Google Sheets ada di bagian bawah halaman itu.
+- Setelah membuat Web App, tempel URL-nya di assets/config.js (sheetUrl: '...').
+- Tanpa internet: siswa mengunduh "Progress file (.json)" dari laporan akhir, lalu guru mengimpornya di teacher.html.
+
+SUARA MS. SATA
+- Buka record.html (Studio Suara) untuk merekam suara sendiri per kalimat.
+- Unduh ZIP rekaman, ekstrak, lalu masukkan isinya ke folder assets/audio (timpa list.js).
+- Kalimat yang belum direkam tetap dibacakan suara perangkat.
